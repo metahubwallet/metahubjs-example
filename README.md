@@ -1,4 +1,4 @@
-# metahubjs
+# metahubjs-example
 
 This example briefly introduces how to interact with metahubjs.  
 
