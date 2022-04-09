@@ -7,15 +7,7 @@ const appName = 'Your App Name';
 const chainId = 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906';
 const rpcUrl = 'https://eos.greymass.com';
 
-// connect
-const connected = await metahubjs.connect();
-if (!connected) {
-  throw new Error('no metahub');
-}
 
-const network = { chainId };
-const rpc = new JsonRpc(rpcUrl, { fetch });
-const api = metahubjs.eos(network, Api, { rpc });
 
 
 export default {
@@ -27,7 +19,15 @@ export default {
       error: '',
     }
   },
-  mounted() {
+  async mounted() {
+    // connect
+    const connected = await metahubjs.connect();
+    if (!connected) {
+      throw new Error('no metahub');
+    }
+    const network = { chainId };
+    const rpc = new JsonRpc(rpcUrl, { fetch });
+    this.api = metahubjs.eos(network, Api, { rpc });
     if (metahubjs.identity) {
       this.account = metahubjs.identity.accounts[0];
       this.islogin = true;
@@ -53,7 +53,7 @@ export default {
     },
     async clickTransfer() {
       try {
-        const result = await api.transact({
+        const result = await this.api.transact({
               actions: [{
                 account: 'eosio.token',
                 name: 'transfer',
